@@ -5,7 +5,25 @@ internal abstract class ConverterBase
     public abstract int Base { get; }
     public abstract string Digits { get; }
 
-    public string Value { get; set; } = "0";
+    private string _value = "0";
+
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные");
+
+            value = value.Trim().ToUpper();
+            foreach (char c in value)
+            {
+                if (!Digits.Contains(c))
+                    throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные");
+            }
+            _value = value;
+        }
+    }
 
     public long ToDecimal()
     {
